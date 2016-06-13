@@ -1,0 +1,11 @@
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <!--
+    <type name="Magento\SalesRule\Model\Validator">
+        <plugin name="zero1_autoaddfreeproduct_model_validator" type="Zero1\AutoAddFreeProduct\Model\ValidatorPlugin" sortOrder="10"/>
+    </type>
+    -->
+    <preference for="Magento\SalesRule\Model\Validator" type="Zero1\AutoAddFreeProduct\Model\Validator" />
+    <preference for="Magento\SalesRule\Model\RulesApplier" type="Zero1\AutoAddFreeProduct\Model\RulesApplier" />
+    <preference for="Magento\SalesRule\Model\Utility" type="Zero1\AutoAddFreeProduct\Model\Utility" />
+    <preference for="Magento\SalesRule\Model\Rule" type="Zero1\AutoAddFreeProduct\Model\Rule" />
+</config>
