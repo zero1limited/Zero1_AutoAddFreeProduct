@@ -1,0 +1,8 @@
+# Apple
+.DS_Store
+
+# Zend
+/.settings/
+
+# PhpStorm
+/.idea/
