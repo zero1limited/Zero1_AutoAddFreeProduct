@@ -11,16 +11,18 @@ class ActionsTabPrepareFormObserver implements ObserverInterface
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
-        /** @var \Magento\Framework\Data\Form $form */
-        $form = $observer->getForm();
-        $field = $form->getElement('simple_action');
-        $options = $field->getValues();
-
-        $options[] = array(
-            'value' => 'auto_add_free_product',
-            'label' => 'Auto Add Free Product'
-        );
-
-        $field->setValues($options);
+        // This no longer works, as of 2.1.2 #M2
+//        /** @var \Magento\Framework\Data\Form $form */
+//        $form = $observer->getForm();
+//
+//        $field = $form->getElement('simple_action');
+//        $options = $field->getValues();
+//
+//        $options[] = array(
+//            'value' => 'auto_add_free_product',
+//            'label' => 'Auto Add Free Product'
+//        );
+//
+//        $field->setValues($options);
     }
 }

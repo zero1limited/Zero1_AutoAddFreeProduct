@@ -2,4 +2,8 @@
     <type name="Magento\SalesRule\Model\RulesApplier">
         <plugin name="zero1_autoaddfreeproduct_model_rulesapplier" type="Zero1\AutoAddFreeProduct\Model\RulesApplierPlugin" sortOrder="10"/>
     </type>
+
+    <type name="Magento\SalesRule\Model\Rule\Metadata\ValueProvider">
+        <plugin name="zero1_autoaddfreeproduct::getMetadataValuesAfter" type="Zero1\AutoAddFreeProduct\Plugin\Magento\SalesRule\Model\Rule\Metadata\ValueProvider\GetMetadataValuesAfter" />
+    </type>
 </config>
