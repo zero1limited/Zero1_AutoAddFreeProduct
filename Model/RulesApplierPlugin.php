@@ -48,6 +48,7 @@ class RulesApplierPlugin
         // Find, process and remove the auto add free product rule from the stack
         $originalRules = array();
         foreach ($rules as $rule) {
+            $this->removeFreeProductDiscount($rule, $item);
             if ($rule->getSimpleAction() === self::AUTO_ADD_FREE_PRODUCT) {
                 if (!$this->validatorUtility->canProcessRule($rule, $item->getAddress())) {
                     // The free product rule is no longer valid, remove the free products
@@ -94,7 +95,7 @@ class RulesApplierPlugin
 
     public function addFreeProduct($rule, $item)
     {
-        //file_put_contents('adam.log', __METHOD__.PHP_EOL, FILE_APPEND);
+        file_put_contents('/home/magento/htdocs/var/log/rules.log', __METHOD__.PHP_EOL, FILE_APPEND);
         /** @var \Magento\Catalog\Model\Product $product */
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $product = $objectManager->create('Magento\Catalog\Model\Product');
@@ -104,75 +105,69 @@ class RulesApplierPlugin
         ////////////////////////////////////////////////////////////////////////////////////
         $actions = $rule->getActions()->asArray();
         if (!$actions) {
-            //file_put_contents('adam.log', 'Invalid rule'.PHP_EOL, FILE_APPEND);
             return; // Invalid rule
         }
 
         if (!isset($actions['type']) || $actions['type'] !== 'Magento\SalesRule\Model\Rule\Condition\Product\Combine') {
-            //file_put_contents('adam.log', 'Invalid rule type'.PHP_EOL, FILE_APPEND);
             return; // Invalid rule type
         }
 
         if (!isset($actions['conditions']) && count($actions['conditions']) !== 1) {
-            //file_put_contents('adam.log', 'Invalid rule condition'.PHP_EOL, FILE_APPEND);
             return; // Invalid rule condition
         }
 
         // Is this a product combination rule?
         $condition = $actions['conditions'][0];
         if ($condition['type'] !== 'Magento\SalesRule\Model\Rule\Condition\Product') {
-            //file_put_contents('adam.log', 'Is this a product combination rule?'.PHP_EOL, FILE_APPEND);
             return;
         }
         $freeItemId = $product->getIdBySku($condition['value']);
-
+        file_put_contents('/home/magento/htdocs/var/log/rules.log', 'freeItemId'.PHP_EOL, FILE_APPEND);
+        file_put_contents('/home/magento/htdocs/var/log/rules.log', $freeItemId.PHP_EOL, FILE_APPEND);
         ////////////////////////////////////////////////////////////////////////////////////
         // Check the conditions...
         ////////////////////////////////////////////////////////////////////////////////////
         $conditions = $rule->getConditions()->asArray();
         if (!$conditions) {
-            //file_put_contents('adam.log', 'Invalid rule1'.PHP_EOL, FILE_APPEND);
             return; // Invalid rule
         }
 
         if (!isset($conditions['type']) || $conditions['type'] !== 'Magento\SalesRule\Model\Rule\Condition\Combine') {
-            //file_put_contents('adam.log', 'Invalid rule type1'.PHP_EOL, FILE_APPEND);
             return; // Invalid rule type
         }
 
         if (!isset($conditions['conditions']) && count($conditions['conditions']) !== 1) {
-            //file_put_contents('adam.log', 'Invalid rule condition'.PHP_EOL, FILE_APPEND);
             return; // Invalid rule condition
         }
 
         // Is this a product combination rule?
         $condition = $conditions['conditions'][0];
         if ($condition['type'] !== 'Magento\SalesRule\Model\Rule\Condition\Product\Found') {
-            //file_put_contents('adam.log', 'Invalid rule condition1'.PHP_EOL, FILE_APPEND);
             return; // Invalid rule condition
         }
 
         if (!isset($condition['conditions']) && count($condition['conditions']) !== 1) {
-            //file_put_contents('adam.log', 'Invalid rule condition2'.PHP_EOL, FILE_APPEND);
             return; // Invalid rule condition
         }
 
         // Is this a product combination rule?
         $condition = $condition['conditions'][0];
         if ($condition['type'] !== 'Magento\SalesRule\Model\Rule\Condition\Product') {
-            //file_put_contents('adam.log', 'Invalid rule condition3'.PHP_EOL, FILE_APPEND);
             return; // Invalid rule condition
         }
+        /* disabling, the action is the
         if ($condition['attribute'] !== 'sku') {
-            //file_put_contents('adam.log', 'Invalid rule condition4'.PHP_EOL, FILE_APPEND);
+            file_put_contents('/home/magento/htdocs/var/log/rules.log', 'Invalid rule condition4'.PHP_EOL, FILE_APPEND);
+            file_put_contents('/home/magento/htdocs/var/log/rules.log', $condition['attribute'].PHP_EOL, FILE_APPEND);
             return; // Invalid rule condition
         }
+        */
         $paidItemId = $product->getIdBySku($condition['value']);
 
         ////////////////////////////////////////////////////////////////////////////////////
         // Get the number of paid/free items in the cart
         ////////////////////////////////////////////////////////////////////////////////////
-        //file_put_contents('adam.log', 'Get the number of paid/free items in the cart'.PHP_EOL, FILE_APPEND);
+        file_put_contents('/home/magento/htdocs/var/log/rules.log', 'Get the number of paid/free items in the cart'.PHP_EOL, FILE_APPEND);
 
         /** @var \Magento\Quote\Model\Quote $quote */
         $quote = $item->getQuote();
