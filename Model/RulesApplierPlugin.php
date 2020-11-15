@@ -75,6 +75,8 @@ class RulesApplierPlugin
         /** @var \Magento\Quote\Model\Quote $quote */
         $quote = $item->getQuote();
         $ruleActions = $rule->getActions()->asArray();
+        if(!isset($ruleActions['conditions']))
+            return;        
         foreach ($ruleActions['conditions'] as $action) {
             $freeProductId = $product->getIdBySku($action['value']);
             if ($freeProductId) {
