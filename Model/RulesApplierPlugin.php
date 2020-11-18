@@ -48,11 +48,13 @@ class RulesApplierPlugin
         // Find, process and remove the auto add free product rule from the stack
         $originalRules = array();
         foreach ($rules as $rule) {
-            $this->removeFreeProductDiscount($rule, $item);
             if ($rule->getSimpleAction() === self::AUTO_ADD_FREE_PRODUCT) {
+
+                $this->removeFreeProductDiscount($rule, $item);
+
                 if (!$this->validatorUtility->canProcessRule($rule, $item->getAddress())) {
                     // The free product rule is no longer valid, remove the free products
-                    $this->removeFreeProductDiscount($rule, $item);
+                    //$this->removeFreeProductDiscount($rule, $item);
                 } else {
                     // Force it to apply the rule, otherwise the actions are never met and
                     // it would never get applied.
@@ -97,7 +99,6 @@ class RulesApplierPlugin
 
     public function addFreeProduct($rule, $item)
     {
-        file_put_contents('/home/magento/htdocs/var/log/rules.log', __METHOD__.PHP_EOL, FILE_APPEND);
         /** @var \Magento\Catalog\Model\Product $product */
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $product = $objectManager->create('Magento\Catalog\Model\Product');
